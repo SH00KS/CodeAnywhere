@@ -1,0 +1,49 @@
+<html>
+<body>
+  <div id='a'><div>Block</div><div><span data-bind={text:name}></span> - <span data-bind={text:weather}></span></div></div>
+  <script
+    src="https://code.jquery.com/jquery-2.2.4.js"
+    integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+    crossorigin="anonymous"></script>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js'></script>
+
+  <script>
+    $(function(){
+      var myViewModel = {
+            name: ko.observable('-'),
+            weather: ko.observable('-')
+      };
+
+      ko.applyBindings(myViewModel);
+
+        $.ajax({
+          url:'http://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=d6224aa5c25112cfd119322d91699e5c',
+          success: function(data){
+            console.log('pure ajax start')
+              console.log(data);
+              console.log(data.name)
+              console.log('pure ajax end')
+          }
+        });
+
+        $.getJSON("http://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=d6224aa5c25112cfd119322d91699e5c", function(data) {
+        // Now use this data to update your view models,
+        // and Knockout will update your UI automatically
+        console.log('getJSON start')
+          console.log(data);
+          console.log(data.name);
+          myViewModel.name(data.name);
+          if(data.weather != undefined && data.weather.length > 0)
+            {console.log(data.weather[0].description);
+              myViewModel.weather(data.weather[0].description);
+            }
+          console.log('getJSON end')
+    })
+    })
+
+
+  </script>
+
+</body>
+</html>
